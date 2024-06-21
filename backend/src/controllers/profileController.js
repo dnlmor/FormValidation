@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const { profileSchema } = require('../validators/profileValidator');
 
 const validateProfile = (req, res) => {
