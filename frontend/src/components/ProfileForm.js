@@ -21,8 +21,7 @@ const schema = yup.object().shape({
   dateOfBirth: yup.date().required('Date of Birth is required').nullable().typeError('Invalid date format'),
   favoriteNumber: yup.number()
     .required('Favorite number is required')
-    .min(1, 'Favorite number must be at least 1')
-    .max(100, 'Favorite number must be at most 100'),
+    .matches(/^\d+$/, 'Favorite number must be an integer'),
   favoriteMammal: yup.string()
     .required('Favorite four-legged mammal is required')
     .oneOf(['Dog', 'Cat', 'Horse', 'Elephant', 'Cow'], 'Please select a valid mammal'),
