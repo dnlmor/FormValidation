@@ -3,6 +3,6 @@ const { validateProfile } = require('../controllers/profileController');
 
 const router = express.Router();
 
-router.post('/validate', validateProfile);
+router.post('/', validateProfile);
 
 module.exports = router;
