@@ -1,70 +1,403 @@
-.form-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  margin: auto;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script|Roboto');
 
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-label {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-.form-input, .form-select {
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+*, *:after, *:before {
   box-sizing: border-box;
 }
 
-.form-button {
-  padding: 0.5rem;
-  font-size: 1rem;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 5px;
+body {
+  background: rgba(255, 64, 129, 0.8);
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+.panda {
+  position: relative;
+  width: 200px;
+  margin: 50px auto;
+}
+
+.face {
+  width: 200px;
+  height: 200px;
+  background: #fff;
+  border-radius: 100%;
+  margin: 50px auto;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  position: relative;
+}
+
+.ear {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: #000;
+  z-index: 5;
+  border: 10px solid #fff;
+  left: -15px;
+  top: -15px;
+  border-radius: 100%;
+}
+
+.ear:after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: #000;
+  z-index: 5;
+  border: 10px solid #fff;
+  left: 125px;
+  top: -15px;
+  border-radius: 100%;
+}
+
+.eye-shade {
+  background: #000;
+  width: 50px;
+  height: 80px;
+  margin: 10px;
+  position: absolute;
+  top: 35px;
+  left: 25px;
+  transform: rotate(220deg);
+  border-radius: 25px 30px 35px 40px;
+}
+
+.eye-shade.rgt {
+  transform: rotate(140deg);
+  left: 105px;
+}
+
+.eye-white {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background: #fff;
+  z-index: 500;
+  left: 40px;
+  top: 80px;
+  overflow: hidden;
+}
+
+.eye-white.rgt {
+  right: 40px;
+  left: auto;
+}
+
+.eye-ball {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  left: 20px;
+  top: 20px;
+  max-width: 10px;
+  max-height: 10px;
+  transition: 0.1s;
+}
+
+.eye-ball:after {
+  content: '';
+  background: #000;
+  position: absolute;
+  border-radius: 100%;
+  right: 0;
+  bottom: 0px;
+  width: 20px;
+  height: 20px;
+}
+
+.nose {
+  position: absolute;
+  height: 20px;
+  width: 35px;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-radius: 50px 20px 30px 15px;
+  transform: rotate(15deg);
+  background: #000;
+}
+
+.body {
+  background: #fff;
+  position: absolute;
+  top: 200px;
+  left: -48px;
+  border-radius: 100px 100px 100px 100px / 126px 126px 96px 96px;
+  width: 300px;
+  height: 840px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hand {
+  width: 400px;
+  height: 100px;
+  border-radius: 50px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  background: #000;
+  margin: 5px;
+  position: absolute;
+  top: 70px;
+  left: -25px;
+}
+
+.hand:after, .hand:before {
+  content: '';
+  width: 40px;
+  height: 30px;
+  border-radius: 50px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+  background: #000;
+  margin: 5px;
+  position: absolute;
+  left: -5px;
+  top: 11px;
+}
+
+.hand:before {
+  top: 26px;
+}
+
+.hand.rgt {
+  left: auto;
+  right: -25px;
+}
+
+.hand.rgt:after, .hand.rgt:before {
+  left: auto;
+  right: -5px;
+}
+
+.foot {
+  top: 720px;
+  left: -80px;
+  position: absolute;
+  background: #000;
+  z-index: 1400;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 40px 40px 39px 40px / 26px 26px 63px 63px;
+  width: 90px;
+  height: 110px;
+}
+
+.foot:after {
+  content: '';
+  width: 55px;
+  height: 65px;
+  background: #222;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.finger {
+  position: absolute;
+  width: 25px;
+  height: 35px;
+  background: #222;
+  border-radius: 100%;
+  top: 10px;
+  right: 5px;
+}
+
+.finger:after, .finger:before {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 35px;
+  background: #222;
+  border-radius: 100%;
+  top: 10px;
+  right: 5px;
+}
+
+.finger:after {
+  right: 30px;
+}
+
+.finger:before {
+  right: 55px;
+  top: 5px;
+}
+
+.foot.rgt {
+  left: auto;
+  right: -80px;
+}
+
+.foot.rgt .finger {
+  left: 5px;
+  right: auto;
+}
+
+.foot.rgt .finger:after {
+  left: 30px;
+  right: auto;
+}
+
+.foot.rgt .finger:before {
+  left: 55px;
+  right: auto;
+}
+
+form {
+  display: none;
+  max-width: 400px;
+  padding: 20px 40px;
+  background: #fff;
+  height: 870px;
+  margin: auto;
+  display: block;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+  position: relative;
+  transform: translateY(-100px);
+  z-index: 500;
+  border: 1px solid #eee;
+}
+
+form.up {
+  transform: translateY(-180px);
+}
+
+h1 {
+  color: rgba(255, 64, 129, 1);
+  font-family: 'Dancing Script', cursive;
+}
+
+.btn {
+  background: #fff;
+  padding: 5px;
+  width: 150px;
+  height: 35px;
+  border: 1px solid rgba(255, 64, 129, 1);
+  margin-top: 25px;
   cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 50px rgba(255, 64, 129, 1) inset;
+  color: #fff;
 }
 
-.form-button:disabled {
-  background-color: #cccccc;
+.btn:hover {
+  box-shadow: 0 0 rgba(255, 64, 129, 1) inset;
+  color: rgba(255, 64, 129, 1);
 }
 
-.form-button:hover:enabled {
-  background-color: #0056b3;
+.btn:focus {
+  outline: none;
 }
 
-.error-message {
-  color: red;
-  font-size: 0.875rem;
-  margin: 0;
+/* Updated styles for form inputs */
+.form-container {
+  max-width: 400px;
+  margin: 50px auto; /* Adjusted margin for better centering */
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+  position: relative;
+  transform: translateY(-100px);
+  z-index: 500;
 }
 
-.loading {
-  font-size: 1rem;
-  color: #007BFF;
+.form-group {
+  margin-top: 20px; /* Reduced top margin for closer spacing */
+  position: relative;
 }
 
-.message {
-  font-size: 1rem;
-  margin-top: 1rem;
+.form-label {
+  font-size: 14px; /* Smaller font size for labels */
+  color: #555; /* Darker color for better contrast */
+  margin-bottom: 8px; /* Added margin below label for spacing */
 }
 
-.message.success {
-  color: green;
+.form-control {
+  width: 100%;
+  height: 35px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+  font-size: 16px;
+  color: #555;
+  transition: border-color 0.3s;
 }
 
-.message.error {
-  color: red;
+.form-control:focus,
+.form-control:valid {
+  outline: none;
+  border-color: rgba(255, 64, 129, 1);
+}
+
+.alert {
+  position: absolute;
+  color: #f00;
+  font-size: 16px;
+  right: -180px;
+  top: -300px;
+  z-index: 200;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.4s 0.6s linear;
+}
+
+.alert:after,
+.alert:before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  left: -15px;
+  bottom: -6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+}
+
+.alert:before {
+  width: 12px;
+  height: 12px;
+  left: -28px;
+  bottom: -18px;
+}
+
+.wrong-entry {
+  animation: wrong-log 0.3s;
+}
+
+.wrong-entry .alert {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes eye-blink {
+  to {
+    height: 30px;
+  }
+}
+
+@keyframes wrong-log {
+  0%,
+  100% {
+    left: 0px;
+  }
+  20%,
+  60% {
+    left: 20px;
+  }
+  40%,
+  80% {
+    left: -20px;
+  }
 }
