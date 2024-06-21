@@ -1,71 +1,70 @@
 .form-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: auto;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .form-label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .form-input, .form-select {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .form-button {
-    padding: 0.5rem;
-    font-size: 1rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .form-button:disabled {
-    background-color: #cccccc;
-  }
-  
-  .form-button:hover:enabled {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 0.875rem;
-    margin: 0;
-  }
-  
-  .loading {
-    font-size: 1rem;
-    color: #007BFF;
-  }
-  
-  .message {
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .message.success {
-    color: green;
-  }
-  
-  .message.error {
-    color: red;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-input, .form-select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-button:disabled {
+  background-color: #cccccc;
+}
+
+.form-button:hover:enabled {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.loading {
+  font-size: 1rem;
+  color: #007BFF;
+}
+
+.message {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.message.success {
+  color: green;
+}
+
+.message.error {
+  color: red;
+}

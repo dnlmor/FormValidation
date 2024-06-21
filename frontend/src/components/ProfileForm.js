@@ -4,37 +4,26 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
-import { submitProfileForm } from '../services/api';
-import './ProfileForm.css';
+import { submitProfileForm } from '../services/api.js'; // Replace with actual API service import
+import './ProfileForm.css'; // Optional: Add your own styles
 
 const schema = yup.object().shape({
-  fullName: yup.string()
-    .required('Full name is required')
-    .matches(/^[a-zA-Z'-\s]+$/, 'Full name can only include alphabets, spaces, apostrophes, and hyphens'),
-  email: yup.string().required('Email is required').email('Email is not valid'),
-  password: yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, 'Password must include alphabets, numerals, and special characters'),
+  fullName: yup.string().required('Full name is required'),
+  email: yup.string().required('Email is required').email('Invalid email format'),
+  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
   phone: yup.string().required('Phone number is required'),
-  dateOfBirth: yup.date().required('Date of Birth is required').nullable().typeError('Invalid date format'),
-  favoriteNumber: yup.number()
-    .required('Favorite number is required')
-    .min(1, 'Favorite number must be at least 1')
-    .max(100, 'Favorite number must be at most 100'),
-  favoriteMammal: yup.string()
-    .required('Favorite four-legged mammal is required')
-    .oneOf(['Dog', 'Cat', 'Horse', 'Elephant', 'Cow'], 'Please select a valid mammal'),
-  address: yup.string()
-    .required('Address is required')
-    .matches(/^[a-zA-Z0-9\s,.'-]{3,}$/, 'Address must be valid')
+  dateOfBirth: yup.date().required('Date of Birth is required'),
+  favoriteNumber: yup.number().required('Favorite number is required').min(1, 'Favorite number must be at least 1').max(10000, 'Favorite number must be at most 10000'),
+  favoriteMammal: yup.string().required('Favorite mammal is required'),
+  address: yup.string().required('Address is required'),
 });
 
 function ProfileForm() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -42,7 +31,7 @@ function ProfileForm() {
     setLoading(true);
     setMessage('');
     try {
-      const response = await submitProfileForm(data);
+      const response = await submitProfileForm(data); // Replace with actual API call
       setMessage('Form submitted successfully!');
       console.log('Form submission result:', response);
     } catch (error) {
@@ -93,7 +82,7 @@ function ProfileForm() {
         {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth.message}</p>}
       </div>
       <div className="form-group">
-        <label className="form-label">Favorite Number (1-100):</label>
+        <label className="form-label">Favorite Number (1-10000):</label>
         <input type="number" {...register('favoriteNumber')} placeholder="42" className="form-input" />
         {errors.favoriteNumber && <p className="error-message">{errors.favoriteNumber.message}</p>}
       </div>
