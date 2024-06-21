@@ -3,10 +3,18 @@
      ProfileFormApp/
       │
       ├── backend/
-      │   ├── app.py
-      │   ├── forms.py
-      │   ├── requirements.txt
-      │   └── README.md
+          │   ├── src/
+          │   │   ├── app.js
+          │   │   ├── routes/
+          │   │   │   └── profile.js
+          │   │   ├── controllers/
+          │   │   │   └── profileController.js
+          │   │   ├── validators/
+          │   │   │   └── profileValidator.js
+          │   ├── package.json
+          │   ├── package-lock.json
+          │   └── README.md
+          └── README.md
       │
       ├── frontend/
       │   ├── public/
