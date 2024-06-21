@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import { submitProfileForm } from '../services/api';
+import './ProfileForm.css';
 
 const schema = yup.object().shape({
   fullName: yup.string()
@@ -53,51 +54,52 @@ function ProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Full Name:</label>
-        <input type="text" {...register('fullName')} placeholder="John Doe" />
-        {errors.fullName && <p>{errors.fullName.message}</p>}
+    <form onSubmit={handleSubmit(onSubmit)} className="form-container">
+      <div className="form-group">
+        <label className="form-label">Full Name:</label>
+        <input type="text" {...register('fullName')} placeholder="John Doe" className="form-input" />
+        {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
       </div>
-      <div>
-        <label>Email:</label>
-        <input type="email" {...register('email')} placeholder="user@example.com" />
-        {errors.email && <p>{errors.email.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Email:</label>
+        <input type="email" {...register('email')} placeholder="user@example.com" className="form-input" />
+        {errors.email && <p className="error-message">{errors.email.message}</p>}
       </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" {...register('password')} placeholder="••••••••" />
-        {errors.password && <p>{errors.password.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Password:</label>
+        <input type="password" {...register('password')} placeholder="••••••••" className="form-input" />
+        {errors.password && <p className="error-message">{errors.password.message}</p>}
       </div>
-      <div>
-        <label>Confirm Password:</label>
-        <input type="password" {...register('confirmPassword')} placeholder="••••••••" />
-        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Confirm Password:</label>
+        <input type="password" {...register('confirmPassword')} placeholder="••••••••" className="form-input" />
+        {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
       </div>
-      <div>
-        <label>Phone:</label>
+      <div className="form-group">
+        <label className="form-label">Phone:</label>
         <PhoneInput
           country={'us'}
           value=""
           onChange={phone => setValue('phone', phone)}
           inputStyle={{ width: '100%' }}
           placeholder="Enter phone number"
+          containerClass="form-input"
         />
-        {errors.phone && <p>{errors.phone.message}</p>}
+        {errors.phone && <p className="error-message">{errors.phone.message}</p>}
       </div>
-      <div>
-        <label>Date of Birth:</label>
-        <input type="date" {...register('dateOfBirth')} placeholder="MM/DD/YYYY" />
-        {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Date of Birth:</label>
+        <input type="date" {...register('dateOfBirth')} placeholder="MM/DD/YYYY" className="form-input" />
+        {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth.message}</p>}
       </div>
-      <div>
-        <label>Favorite Number (1-100):</label>
-        <input type="number" {...register('favoriteNumber')} placeholder="42" />
-        {errors.favoriteNumber && <p>{errors.favoriteNumber.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Favorite Number (1-100):</label>
+        <input type="number" {...register('favoriteNumber')} placeholder="42" className="form-input" />
+        {errors.favoriteNumber && <p className="error-message">{errors.favoriteNumber.message}</p>}
       </div>
-      <div>
-        <label>Favorite Four-Legged Mammal:</label>
-        <select {...register('favoriteMammal')}>
+      <div className="form-group">
+        <label className="form-label">Favorite Four-Legged Mammal:</label>
+        <select {...register('favoriteMammal')} className="form-select">
           <option value="">Select...</option>
           <option value="Dog">Dog</option>
           <option value="Cat">Cat</option>
@@ -105,16 +107,16 @@ function ProfileForm() {
           <option value="Elephant">Elephant</option>
           <option value="Cow">Cow</option>
         </select>
-        {errors.favoriteMammal && <p>{errors.favoriteMammal.message}</p>}
+        {errors.favoriteMammal && <p className="error-message">{errors.favoriteMammal.message}</p>}
       </div>
-      <div>
-        <label>Address:</label>
-        <input type="text" {...register('address')} placeholder="123 Main St, Anytown, USA" />
-        {errors.address && <p>{errors.address.message}</p>}
+      <div className="form-group">
+        <label className="form-label">Address:</label>
+        <input type="text" {...register('address')} placeholder="123 Main St, Anytown, USA" className="form-input" />
+        {errors.address && <p className="error-message">{errors.address.message}</p>}
       </div>
-      <button type="submit" disabled={loading}>Submit</button>
-      {loading && <p>Loading...</p>}
-      {message && <p>{message}</p>}
+      <button type="submit" disabled={loading} className="form-button">Submit</button>
+      {loading && <p className="loading">Loading...</p>}
+      {message && <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>{message}</p>}
     </form>
   );
 }
