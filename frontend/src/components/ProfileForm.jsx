@@ -1,3 +1,4 @@
+import he from 'he'; // Add this import for HTML entity encoding
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
