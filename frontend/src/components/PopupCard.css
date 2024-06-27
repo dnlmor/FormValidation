@@ -1,0 +1,26 @@
+/* PopupCard.css */
+
+.popup-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it overlays other content */
+    max-width: 300px;
+    text-align: center;
+  }
+  
+  .popup-content {
+    padding: 1rem;
+  }
+  
+  .popup-content img {
+    max-width: 100px;
+    margin-bottom: 1rem;
+  }
+  
