@@ -1,24 +1,56 @@
-import he from 'he'; // Add this import for HTML entity encoding
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
-import $ from 'jquery'; // Import jQuery
+import $ from 'jquery';
 import { submitProfileForm } from '../services/api.js'; // Replace with actual API service import
+import * as yup from 'yup'; // Import Yup for validation
+import he from 'he'; // Import he library for HTML entity encoding
 import './ProfileForm.css'; // Optional: Add your own styles
 
 const schema = yup.object().shape({
-  fullName: yup.string().required('Full name is required'),
-  email: yup.string().required('Email is required').email('Invalid email format'),
-  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-  phone: yup.string().required('Phone number is required'),
-  dateOfBirth: yup.date().required('Date of Birth is required'),
-  favoriteNumber: yup.number().required('Favorite number is required').min(1, 'Favorite number must be at least 1').max(10000, 'Favorite number must be at most 10000'),
-  favoriteMammal: yup.string().required('Favorite mammal is required'),
-  address: yup.string().required('Address is required'),
+  fullName: yup.string()
+    .required('Full name is required')
+    .matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
+
+  email: yup.string()
+    .required('Email is required')
+    .matches(/^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+
+  password: yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+
+  confirmPassword: yup.string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
+
+  phone: yup.string()
+    .required('Phone number is required')
+    .matches(/^\+?[1-9]\d{1,14}$/, 'Phone number is not valid'),
+
+  dateOfBirth: yup.date()
+    .required('Date of Birth is required')
+    .max(new Date(), 'Date of Birth cannot be in the future'),
+
+  favoriteNumber: yup.number()
+    .typeError('Favorite number must be a valid number')
+    .integer('Favorite number must be an integer')
+    .required('Favorite number is required')
+    .min(1, 'Favorite number must be at least 1'),
+
+  favoriteMammal: yup.string()
+    .required('Favorite mammal is required'),
+
+  address: yup.string()
+    .required('Address is required')
+    .min(5, 'Address must be at least 5 characters')
+    .max(100, 'Address must be at most 100 characters'),
 });
 
 function ProfileForm() {
@@ -33,7 +65,11 @@ function ProfileForm() {
     setLoading(true);
     setMessage('');
     try {
-      const response = await submitProfileForm(data); // Replace with actual API call
+      // Encode each field using encodeURIComponent to handle special characters and URL encoding
+      const encodedFullName = encodeURIComponent(data.fullName);
+      const encodedAddress = encodeURIComponent(data.address);
+      
+      const response = await submitProfileForm({ ...data, fullName: encodedFullName, address: encodedAddress });
       setMessage('Form submitted successfully!');
       console.log('Form submission result:', response);
     } catch (error) {
@@ -133,8 +169,8 @@ function ProfileForm() {
           {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth.message}</p>}
         </div>
         <div className="form-group">
-          <input type="number" {...register('favoriteNumber')} className="form-control" required />
-          <label className="form-label">Favorite Number (1-10000)</label>
+          <input type="text" {...register('favoriteNumber')} className="form-control" required />
+          <label className="form-label">Favorite Number (1-...)</label>
           {errors.favoriteNumber && <p className="error-message">{errors.favoriteNumber.message}</p>}
         </div>
         <div className="form-group">
