@@ -1,48 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import 'react-phone-input-2/lib/style.css';
-import PhoneInput from 'react-phone-input-2';
-import $ from 'jquery';
-import { submitProfileForm } from '../services/api.js'; // Replace with actual API service import
-import * as yup from 'yup'; // Import Yup for validation
-import he from 'he'; // Import he library for HTML entity encoding
-import './ProfileForm.css'; // Optional: Add your own styles
+import { useNavigate } from 'react-router-dom';
+import { submitProfileForm } from '../services/api';
+import * as yup from 'yup';
+import './ProfileForm.css';
 
 const schema = yup.object().shape({
-  fullName: yup.string()
-    .required('Full name is required')
-    .matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
+  fullName: yup.string().required('Full name is required').matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
+  email: yup.string().required('Email is required').matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters').matches(/[a-z]/, 'Password must contain at least one lowercase letter').matches(/[A-Z]/, 'Password must contain at least one uppercase letter').matches(/[0-9]/, 'Password must contain at least one number').matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
+  phone: yup.string().required('Phone number is required'),
+  dateOfBirth: yup.date().required('Date of birth is required').nullable(),
+  favoriteNumber: yup.number().required('Favorite number is required').integer(),
+  favoriteMammal: yup.string().required('Favorite mammal is required'),
+  address: yup.string().required('Address is required')
+});
 
-  email: yup.string()
-    .required('Email is required')
-    .matches(/^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+const ProfileForm = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
+  const navigate = useNavigate();
 
-  password: yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[0-9]/, 'Password must contain at least one number')
-    .matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+  const onSubmit = async (data) => {
+    try {
+      await submitProfileForm(data);
+      navigate('/submissions');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
 
-  confirmPassword: yup.string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required'),
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Form fields here */}
+    </form>
+  );
+};
 
-  phone: yup.string()
-    .required('Phone number is required')
-    .matches(/^\+?[1-9]\d{1,14}$/, 'Phone number is not valid'),
-
-  dateOfBirth: yup.date()
-    .required('Date of Birth is required')
-    .max(new Date(), 'Date of Birth cannot be in the future'),
-
-  favoriteNumber: yup.number()
-    .typeError('Favorite number must be a valid number')
-    .integer('Favorite number must be an integer')
-    .required('Favorite number is required')
-    .min(1, 'Favorite number must be at least 1'),
+export default ProfileForm;
 
   favoriteMammal: yup.string()
     .required('Favorite mammal is required'),
