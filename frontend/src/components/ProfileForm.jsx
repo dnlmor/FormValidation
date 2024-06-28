@@ -10,16 +10,32 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
 const schema = yup.object().shape({
-  fullName: yup.string().required('Full name is required').matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
-  email: yup.string().required('Email is required').matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
-  password: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters').matches(/[a-z]/, 'Password must contain at least one lowercase letter').matches(/[A-Z]/, 'Password must contain at least one uppercase letter').matches(/[0-9]/, 'Password must contain at least one number').matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
+  fullName: yup.string()
+    .required('Full name is required')
+    .matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
+  email: yup.string()
+    .required('Email is required')
+    .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+  password: yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+  confirmPassword: yup.string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
   phone: yup.string().required('Phone number is required'),
   dateOfBirth: yup.date().required('Date of birth is required').nullable(),
   favoriteNumber: yup.number().required('Favorite number is required').integer(),
   favoriteMammal: yup.string().required('Favorite mammal is required'),
-  address: yup.string().required('Address is required').min(5, 'Address must be at least 5 characters').max(100, 'Address must be at most 100 characters')
+  address: yup.string()
+    .required('Address is required')
+    .min(5, 'Address must be at least 5 characters')
+    .max(100, 'Address must be at most 100 characters')
 });
+
 
 const ProfileForm = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -47,14 +63,13 @@ const ProfileForm = () => {
   };
 
   useEffect(() => {
-    $('#password').focusin(function () {
-      $('form').addClass('up');
-    });
-    $('#password').focusout(function () {
-      $('form').removeClass('up');
-    });
+    const passwordInput = $('#password');
+    if (passwordInput.length) {
+      passwordInput.focusin(() => $('form').addClass('up'));
+      passwordInput.focusout(() => $('form').removeClass('up'));
+    }
 
-    $(document).on('mousemove', function (event) {
+    $(document).on('mousemove', (event) => {
       const dw = $(document).width() / 15;
       const dh = $(document).height() / 15;
       const x = event.pageX / dw;
@@ -65,12 +80,15 @@ const ProfileForm = () => {
       });
     });
 
-    $('.btn').click(function () {
-      $('form').addClass('wrong-entry');
-      setTimeout(function () {
-        $('form').removeClass('wrong-entry');
-      }, 3000);
-    });
+    const btn = $('.btn');
+    if (btn.length) {
+      btn.click(() => {
+        $('form').addClass('wrong-entry');
+        setTimeout(() => {
+          $('form').removeClass('wrong-entry');
+        }, 3000);
+      });
+    }
   }, []);
 
   return (
