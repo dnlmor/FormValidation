@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api'; // Make sure this matches your backend port
+const API_BASE_URL = 'http://localhost:3001/api';
 
 export const submitProfileForm = async (data) => {
   try {
@@ -8,6 +8,16 @@ export const submitProfileForm = async (data) => {
     return response.data;
   } catch (error) {
     console.error('Error submitting form:', error);
+    throw error;
+  }
+};
+
+export const getProfileSubmissions = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/profile/submissions`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching submissions:', error);
     throw error;
   }
 };
