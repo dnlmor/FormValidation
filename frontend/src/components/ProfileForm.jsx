@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { submitProfileForm } from '../services/api';
 import * as yup from 'yup';
+import $ from 'jquery';
 import './ProfileForm.css';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const schema = yup.object().shape({
   fullName: yup.string().required('Full name is required').matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
@@ -15,47 +18,14 @@ const schema = yup.object().shape({
   dateOfBirth: yup.date().required('Date of birth is required').nullable(),
   favoriteNumber: yup.number().required('Favorite number is required').integer(),
   favoriteMammal: yup.string().required('Favorite mammal is required'),
-  address: yup.string().required('Address is required')
+  address: yup.string().required('Address is required').min(5, 'Address must be at least 5 characters').max(100, 'Address must be at most 100 characters')
 });
 
 const ProfileForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
-  });
-  const navigate = useNavigate();
-
-  const onSubmit = async (data) => {
-    try {
-      await submitProfileForm(data);
-      navigate('/submissions');
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* Form fields here */}
-    </form>
-  );
-};
-
-export default ProfileForm;
-
-  favoriteMammal: yup.string()
-    .required('Favorite mammal is required'),
-
-  address: yup.string()
-    .required('Address is required')
-    .min(5, 'Address must be at least 5 characters')
-    .max(100, 'Address must be at most 100 characters'),
-});
-
-function ProfileForm() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -63,13 +33,11 @@ function ProfileForm() {
     setLoading(true);
     setMessage('');
     try {
-      // Encode each field using encodeURIComponent to handle special characters and URL encoding
       const encodedFullName = encodeURIComponent(data.fullName);
       const encodedAddress = encodeURIComponent(data.address);
-      
-      const response = await submitProfileForm({ ...data, fullName: encodedFullName, address: encodedAddress });
+      await submitProfileForm({ ...data, fullName: encodedFullName, address: encodedAddress });
       setMessage('Form submitted successfully!');
-      console.log('Form submission result:', response);
+      navigate('/submissions');
     } catch (error) {
       setMessage('Failed to submit form. Please try again.');
       console.error('Error submitting form:', error);
@@ -87,10 +55,10 @@ function ProfileForm() {
     });
 
     $(document).on('mousemove', function (event) {
-      var dw = $(document).width() / 15;
-      var dh = $(document).height() / 15;
-      var x = event.pageX / dw;
-      var y = event.pageY / dh;
+      const dw = $(document).width() / 15;
+      const dh = $(document).height() / 15;
+      const x = event.pageX / dw;
+      const y = event.pageY / dh;
       $('.eye-ball').css({
         width: x,
         height: y,
@@ -167,8 +135,8 @@ function ProfileForm() {
           {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth.message}</p>}
         </div>
         <div className="form-group">
-          <input type="text" {...register('favoriteNumber')} className="form-control" required />
-          <label className="form-label">Favorite Number (1-...)</label>
+          <input type="number" {...register('favoriteNumber')} className="form-control" required />
+          <label className="form-label">Favorite Number</label>
           {errors.favoriteNumber && <p className="error-message">{errors.favoriteNumber.message}</p>}
         </div>
         <div className="form-group">
@@ -195,6 +163,6 @@ function ProfileForm() {
       <div className="alert">Wrong Entry</div>
     </div>
   );
-}
+};
 
 export default ProfileForm;
