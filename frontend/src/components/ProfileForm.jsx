@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigate } from 'react-router-dom';
-import { submitProfileForm } from '../services/api';
-import * as yup from 'yup';
-import $ from 'jquery';
-import './ProfileForm.css';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
+import $ from 'jquery';
+import { submitProfileForm } from '../services/api.js'; // Replace with actual API service import
+import * as yup from 'yup'; // Import Yup for validation
+import he from 'he'; // Import he library for HTML entity encoding
+import './ProfileForm.css'; // Optional: Add your own styles
 
 const schema = yup.object().shape({
   fullName: yup.string()
     .required('Full name is required')
     .matches(/^[a-zA-Z\s]*$/, 'Full name should only contain letters and spaces'),
+
   email: yup.string()
     .required('Email is required')
-    .matches(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+    .matches(/^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/, 'Invalid email format'),
+
   password: yup.string()
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters')
@@ -23,25 +25,39 @@ const schema = yup.object().shape({
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .matches(/[0-9]/, 'Password must contain at least one number')
     .matches(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+
   confirmPassword: yup.string()
     .oneOf([yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
-  phone: yup.string().required('Phone number is required'),
-  dateOfBirth: yup.date().required('Date of birth is required').nullable(),
-  favoriteNumber: yup.number().required('Favorite number is required').integer(),
-  favoriteMammal: yup.string().required('Favorite mammal is required'),
+
+  phone: yup.string()
+    .required('Phone number is required')
+    .matches(/^\+?[1-9]\d{1,14}$/, 'Phone number is not valid'),
+
+  dateOfBirth: yup.date()
+    .required('Date of Birth is required')
+    .max(new Date(), 'Date of Birth cannot be in the future'),
+
+  favoriteNumber: yup.number()
+    .typeError('Favorite number must be a valid number')
+    .integer('Favorite number must be an integer')
+    .required('Favorite number is required')
+    .min(1, 'Favorite number must be at least 1'),
+
+  favoriteMammal: yup.string()
+    .required('Favorite mammal is required'),
+
   address: yup.string()
     .required('Address is required')
     .min(5, 'Address must be at least 5 characters')
-    .max(100, 'Address must be at most 100 characters')
+    .max(100, 'Address must be at most 100 characters'),
 });
 
-
-const ProfileForm = () => {
+function ProfileForm() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
-  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -49,11 +65,11 @@ const ProfileForm = () => {
     setLoading(true);
     setMessage('');
     try {
-      const encodedFullName = encodeURIComponent(data.fullName);
-      const encodedAddress = encodeURIComponent(data.address);
-      await submitProfileForm({ ...data, fullName: encodedFullName, address: encodedAddress });
+      // Encoding fullName to prevent HTML and JavaScript interpretation
+      const encodedFullName = he.encode(data.fullName);
+      const response = await submitProfileForm({ ...data, fullName: encodedFullName });
       setMessage('Form submitted successfully!');
-      navigate('/submissions');
+      console.log('Form submission result:', response);
     } catch (error) {
       setMessage('Failed to submit form. Please try again.');
       console.error('Error submitting form:', error);
@@ -63,32 +79,30 @@ const ProfileForm = () => {
   };
 
   useEffect(() => {
-    const passwordInput = $('#password');
-    if (passwordInput.length) {
-      passwordInput.focusin(() => $('form').addClass('up'));
-      passwordInput.focusout(() => $('form').removeClass('up'));
-    }
+    $('#password').focusin(function () {
+      $('form').addClass('up');
+    });
+    $('#password').focusout(function () {
+      $('form').removeClass('up');
+    });
 
-    $(document).on('mousemove', (event) => {
-      const dw = $(document).width() / 15;
-      const dh = $(document).height() / 15;
-      const x = event.pageX / dw;
-      const y = event.pageY / dh;
+    $(document).on('mousemove', function (event) {
+      var dw = $(document).width() / 15;
+      var dh = $(document).height() / 15;
+      var x = event.pageX / dw;
+      var y = event.pageY / dh;
       $('.eye-ball').css({
         width: x,
         height: y,
       });
     });
 
-    const btn = $('.btn');
-    if (btn.length) {
-      btn.click(() => {
-        $('form').addClass('wrong-entry');
-        setTimeout(() => {
-          $('form').removeClass('wrong-entry');
-        }, 3000);
-      });
-    }
+    $('.btn').click(function () {
+      $('form').addClass('wrong-entry');
+      setTimeout(function () {
+        $('form').removeClass('wrong-entry');
+      }, 3000);
+    });
   }, []);
 
   return (
@@ -153,8 +167,8 @@ const ProfileForm = () => {
           {errors.dateOfBirth && <p className="error-message">{errors.dateOfBirth.message}</p>}
         </div>
         <div className="form-group">
-          <input type="number" {...register('favoriteNumber')} className="form-control" required />
-          <label className="form-label">Favorite Number</label>
+          <input type="text" {...register('favoriteNumber')} className="form-control" required />
+          <label className="form-label">Favorite Number (1-...)</label>
           {errors.favoriteNumber && <p className="error-message">{errors.favoriteNumber.message}</p>}
         </div>
         <div className="form-group">
@@ -181,6 +195,6 @@ const ProfileForm = () => {
       <div className="alert">Wrong Entry</div>
     </div>
   );
-};
+}
 
 export default ProfileForm;
