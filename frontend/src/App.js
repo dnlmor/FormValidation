@@ -1,13 +1,18 @@
 import React from 'react';
-import ProfileForm from './components/ProfileForm.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProfileForm from './components/ProfileForm';
+import Submissions from './components/Submissions';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Profile Form</h1>
-      <ProfileForm />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ProfileForm />} />
+        <Route path="/submissions" element={<Submissions />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
+
