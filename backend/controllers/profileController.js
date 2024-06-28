@@ -1,4 +1,6 @@
 const Profile = require('../models/Profile');
+
+const Profile = require('../models/Profile');
 const submitProfile = async (req, res) => {
   try {
     console.log('Received profile data:', req.body);
